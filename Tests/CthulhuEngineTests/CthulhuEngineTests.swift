@@ -2,5 +2,22 @@ import Testing
 @testable import CthulhuEngine
 
 @Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    // Attribute full names
+    #expect(Attribute.str.code == "STR")
+    #expect(Attribute.str.fullName == "Strength")
+    #expect(Attribute.int.fullName == "Intelligence")
+
+    // Attribute thresholds
+    let t = AttributeThresholds(value: 70)
+    #expect(t.half == 35)
+    #expect(t.fifth == 14)
+
+    // Character sheet and skills
+    var sheet = CharacterSheet(name: "Harvey Walters")
+    sheet.setAttribute(.str, value: 60)
+    sheet.setSkill(Skill(name: "Spot Hidden", value: 50, base: 25))
+
+    // Deterministic classification check
+    let success = SkillTester.determineSuccess(roll: 12, skillValue: 50)
+    #expect(success == .hard)
 }
