@@ -66,6 +66,7 @@ public extension CharacterSheet {
     ///
     /// - Parameter maxSkillCap: Maximum cap applied to post-improvement value (default 100).
     /// - Returns: A list of improvement results per skill processed.
+    @discardableResult
     mutating func performImprovementChecks(maxSkillCap: Int = 99) -> [SkillImprovementResult] {
         var results: [SkillImprovementResult] = []
         for (key, var skill) in skills where skill.markedForImprovement {

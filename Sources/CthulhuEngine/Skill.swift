@@ -10,7 +10,7 @@ public struct Skill: Codable, Hashable, Sendable {
     /// Whether this skill is marked for improvement checks.
     public var markedForImprovement: Bool
 
-    public init(name: String, value: Int, base: Int = 0, markedForImprovement: Bool = true) {
+    public init(name: String, value: Int, base: Int = 0, markedForImprovement: Bool = false) {
         self.name = name
         self.value = value
         self.base = base
