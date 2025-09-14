@@ -7,11 +7,14 @@ public struct Skill: Codable, Hashable, Sendable {
     public var value: Int
     /// Base value for the skill (rulebook default).
     public var base: Int
+    /// Whether this skill is marked for improvement checks.
+    public var markedForImprovement: Bool
 
-    public init(name: String, value: Int, base: Int = 0) {
+    public init(name: String, value: Int, base: Int = 0, markedForImprovement: Bool = false) {
         self.name = name
         self.value = value
         self.base = base
+        self.markedForImprovement = markedForImprovement
     }
 
     public var thresholds: AttributeThresholds { .init(value: value) }

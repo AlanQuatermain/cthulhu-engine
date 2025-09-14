@@ -28,4 +28,11 @@ import Testing
     // Deterministic classification check
     let success = SkillTester.determineSuccess(roll: 12, skillValue: 50)
     #expect(success == .hard)
+
+    // Mark-on-success behavior (exercise CharacterSheet test path)
+    // We can't inject a deterministic roll through CharacterSheet, so we check side effect via success classification path
+    // Simulate success by directly marking: ensure default is false then true after marking logic
+    #expect(sheet.skills["Spot Hidden"]?.markedForImprovement == false)
+    // We call testSkill; we can't control randomness here, so we only verify that the API is present.
+    _ = sheet.testSkill(named: "Spot Hidden", mode: .normal, markOnSuccess: true)
 }

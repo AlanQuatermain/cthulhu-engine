@@ -169,7 +169,7 @@ public extension Skill {
     /// Convenience initializer from a `SkillType`. If `value` is omitted, it defaults to the base.
     init(type: SkillType, value: Int? = nil, attributes: [Attribute: Int] = [:]) {
         let base = type.defaultBase(attributes: attributes)
-        self.init(name: type.displayName, value: value ?? base, base: base)
+        self.init(name: type.displayName, value: value ?? base, base: base, markedForImprovement: false)
     }
 }
 

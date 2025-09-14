@@ -43,9 +43,17 @@ public struct CharacterSheet: Codable, Sendable, Equatable {
 
 public extension CharacterSheet {
     /// Perform a skill test for a named skill using the provided tester.
-    func testSkill(named name: String, mode: D100Mode = .normal, using tester: SkillTester = SkillTester()) -> SkillTestResult? {
-        guard let skill = skills[name] else { return nil }
-        return tester.test(skill: skill, mode: mode)
+    mutating func testSkill(named name: String,
+                            mode: D100Mode = .normal,
+                            markOnSuccess: Bool = true,
+                            using tester: SkillTester = SkillTester()) -> SkillTestResult? {
+        guard var skill = skills[name] else { return nil }
+        let result = tester.test(skill: skill, mode: mode)
+        if markOnSuccess, result.success != .failure, result.success != .fumble {
+            skill.markedForImprovement = true
+            skills[name] = skill
+        }
+        return result
     }
 
     /// Perform a characteristic test (e.g., STR, DEX, POW) using d100 mechanics.
