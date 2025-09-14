@@ -15,7 +15,15 @@ import Testing
     // Character sheet and skills
     var sheet = CharacterSheet(name: "Harvey Walters")
     sheet.setAttribute(.str, value: 60)
+    sheet.setAttribute(.dex, value: 50)
+    sheet.setAttribute(.edu, value: 70)
     sheet.setSkill(Skill(name: "Spot Hidden", value: 50, base: 25))
+    sheet.setSkill(.dodge) // base should be DEX/2 = 25
+    sheet.setSkill(.languageOwn) // base should be EDU = 70
+    sheet.setSkill(.spotHidden) // base should be 25
+    #expect(sheet.skill(.dodge)?.base == 25)
+    #expect(sheet.skill(.languageOwn)?.base == 70)
+    #expect(sheet.skill(.spotHidden)?.base == 25)
 
     // Deterministic classification check
     let success = SkillTester.determineSuccess(roll: 12, skillValue: 50)

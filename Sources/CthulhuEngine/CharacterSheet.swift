@@ -47,4 +47,10 @@ public extension CharacterSheet {
         guard let skill = skills[name] else { return nil }
         return tester.test(skill: skill, mode: mode)
     }
+
+    /// Perform a characteristic test (e.g., STR, DEX, POW) using d100 mechanics.
+    func testAttribute(_ attr: Attribute, mode: D100Mode = .normal, using tester: SkillTester = SkillTester()) -> SkillTestResult {
+        let value = attributes[attr] ?? 0
+        return tester.test(attribute: value, mode: mode)
+    }
 }

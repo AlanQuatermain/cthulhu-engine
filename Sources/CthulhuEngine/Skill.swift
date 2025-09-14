@@ -54,6 +54,17 @@ public struct SkillTester: Sendable {
         return .init(roll: roll, success: success)
     }
 
+    /// Perform an attribute test against a raw attribute value.
+    /// - Parameters:
+    ///   - value: The attribute value to test against (0-100+).
+    ///   - mode: D100 rolling mode (normal/advantage/disadvantage)
+    /// - Returns: The die roll and success level.
+    public func test(attribute value: Int, mode: D100Mode = .normal) -> SkillTestResult {
+        let roll = DiceUtil.rollD100(mode: mode)
+        let success = SkillTester.determineSuccess(roll: roll, skillValue: value)
+        return .init(roll: roll, success: success)
+    }
+
     /// Determine success level for a given d100 roll and skill value.
     public static func determineSuccess(roll: Int, skillValue: Int) -> SuccessLevel {
         let thresholds = AttributeThresholds(value: skillValue)
