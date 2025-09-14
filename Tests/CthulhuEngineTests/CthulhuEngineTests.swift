@@ -48,4 +48,11 @@ import Testing
         #expect(after >= 1 && after <= 10)
         #expect(sheet.skills["Test Skill"]?.markedForImprovement == false)
     }
+
+    // Creation cap & add helpers
+    sheet.setCreationSkillCap(75)
+    sheet.addToSkill(.spotHidden, amount: 100) // base 25 + 100 => capped at 75
+    #expect(sheet.skill(.spotHidden)?.value == 75)
+    sheet.addToSkill(named: "Custom Skill", amount: 120, cap: 60)
+    #expect(sheet.skills["Custom Skill"]?.value == 60)
 }

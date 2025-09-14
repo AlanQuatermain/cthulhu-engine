@@ -13,19 +13,23 @@ public struct CharacterSheet: Codable, Sendable, Equatable {
     public var skills: [String: Skill]
 
     public var inventory: Inventory
+    /// Optional maximum allowed skill value during character creation.
+    public var creationSkillCap: Int?
 
     public init(name: String,
                 occupation: String? = nil,
                 age: Int? = nil,
                 attributes: [Attribute: Int] = [:],
                 skills: [String: Skill] = [:],
-                inventory: Inventory = .init()) {
+                inventory: Inventory = .init(),
+                creationSkillCap: Int? = nil) {
         self.name = name
         self.occupation = occupation
         self.age = age
         self.attributes = attributes
         self.skills = skills
         self.inventory = inventory
+        self.creationSkillCap = creationSkillCap
     }
 
     public func attribute(_ attr: Attribute) -> Int { attributes[attr] ?? 0 }
@@ -60,6 +64,42 @@ public extension CharacterSheet {
     func testAttribute(_ attr: Attribute, mode: D100Mode = .normal, using tester: SkillTester = SkillTester()) -> SkillTestResult {
         let value = attributes[attr] ?? 0
         return tester.test(attribute: value, mode: mode)
+    }
+
+    // MARK: - Character creation helpers
+
+    /// Set or clear the creation-time skill cap.
+    mutating func setCreationSkillCap(_ cap: Int?) {
+        self.creationSkillCap = cap
+    }
+
+    /// Add points to a named skill, applying a cap if provided or if `creationSkillCap` is set.
+    /// If the skill does not exist, it will be created with a base of 0.
+    mutating func addToSkill(named name: String, amount: Int, cap: Int? = nil) {
+        guard amount != 0 else { return }
+        var skill = skills[name] ?? Skill(name: name, value: 0, base: 0)
+        let appliedCap = cap ?? creationSkillCap ?? Int.max
+        let added = max(0, amount)
+        let newValue = min(skill.value + added, appliedCap)
+        skill.value = newValue
+        skills[name] = skill
+    }
+
+    /// Add points to a typed skill, creating it from its base if missing. Applies creation cap.
+    mutating func addToSkill(_ type: SkillType, amount: Int, cap: Int? = nil) {
+        let name = type.displayName
+        if var existing = skills[name] {
+            let appliedCap = cap ?? creationSkillCap ?? Int.max
+            let added = max(0, amount)
+            existing.value = min(existing.value + added, appliedCap)
+            skills[name] = existing
+        } else {
+            var skill = Skill(type: type, attributes: attributes)
+            let appliedCap = cap ?? creationSkillCap ?? Int.max
+            let added = max(0, amount)
+            skill.value = min(skill.value + added, appliedCap)
+            skills[name] = skill
+        }
     }
 
     /// Perform improvement checks for all skills marked for improvement.
