@@ -35,4 +35,17 @@ import Testing
     #expect(sheet.skills["Spot Hidden"]?.markedForImprovement == false)
     // We call testSkill; we can't control randomness here, so we only verify that the API is present.
     _ = sheet.testSkill(named: "Spot Hidden", mode: .normal, markOnSuccess: true)
+
+    // Improvement delta logic (pure function):
+    #expect(SkillTester.improvementDelta(current: 50, checkRoll: 60, gainRoll: 7) == 7)
+    #expect(SkillTester.improvementDelta(current: 50, checkRoll: 40, gainRoll: 7) == 0)
+
+    // Improvement checks: with a 0% skill, improvement always triggers; mark clears.
+    sheet.setSkill(Skill(name: "Test Skill", value: 0, base: 0, markedForImprovement: true))
+    let improvements = sheet.performImprovementChecks()
+    #expect(improvements.count == 1)
+    if let after = sheet.skills["Test Skill"]?.value {
+        #expect(after >= 1 && after <= 10)
+        #expect(sheet.skills["Test Skill"]?.markedForImprovement == false)
+    }
 }

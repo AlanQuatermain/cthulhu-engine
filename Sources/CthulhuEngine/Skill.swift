@@ -37,6 +37,15 @@ public struct SkillTestResult: Codable, Equatable, Sendable {
     public let success: SuccessLevel
 }
 
+public struct SkillImprovementResult: Codable, Equatable, Sendable {
+    public let name: String
+    public let before: Int
+    public let checkRoll: Int
+    public let gained: Int
+    public let after: Int
+    public let improved: Bool
+}
+
 public enum D100Mode: Sendable {
     case normal
     case advantage
@@ -79,5 +88,11 @@ public struct SkillTester: Sendable {
         if roll <= thresholds.half { return .hard }
         if roll <= thresholds.value { return .regular }
         return .failure
+    }
+
+    /// Compute improvement delta given a check roll and a gain roll result.
+    /// If `checkRoll` is greater than `current`, returns `gainRoll`; otherwise 0.
+    public static func improvementDelta(current: Int, checkRoll: Int, gainRoll: Int) -> Int {
+        return checkRoll > current ? max(0, gainRoll) : 0
     }
 }

@@ -61,4 +61,31 @@ public extension CharacterSheet {
         let value = attributes[attr] ?? 0
         return tester.test(attribute: value, mode: mode)
     }
+
+    /// Perform improvement checks for all skills marked for improvement.
+    ///
+    /// - Parameter maxSkillCap: Maximum cap applied to post-improvement value (default 100).
+    /// - Returns: A list of improvement results per skill processed.
+    mutating func performImprovementChecks(maxSkillCap: Int = 100) -> [SkillImprovementResult] {
+        var results: [SkillImprovementResult] = []
+        for (key, var skill) in skills where skill.markedForImprovement {
+            let check = (try? DiceUtil.rollValue("d%")) ?? Int.random(in: 1...100)
+            let gain = (try? DiceUtil.rollValue("1d10")) ?? Int.random(in: 1...10)
+            let before = skill.value
+            let delta = SkillTester.improvementDelta(current: before, checkRoll: check, gainRoll: gain)
+            let after = min(before + delta, maxSkillCap)
+            let improved = after > before
+            skill.value = after
+            skill.markedForImprovement = false
+            skills[key] = skill
+
+            results.append(SkillImprovementResult(name: skill.name,
+                                                  before: before,
+                                                  checkRoll: check,
+                                                  gained: improved ? (after - before) : 0,
+                                                  after: after,
+                                                  improved: improved))
+        }
+        return results
+    }
 }
