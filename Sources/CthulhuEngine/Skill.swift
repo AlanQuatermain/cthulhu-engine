@@ -15,6 +15,9 @@ public struct Skill: Codable, Hashable, Sendable {
     }
 
     public var thresholds: AttributeThresholds { .init(value: value) }
+
+    /// Returns the skill's displayable name.
+    public func displayName() -> String { name }
 }
 
 public enum SuccessLevel: String, Codable, Equatable, Sendable {
