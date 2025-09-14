@@ -1,6 +1,11 @@
 import Foundation
 
 /// Represents an investigator/character in Call of Cthulhu.
+///
+/// A `CharacterSheet` holds primary attributes, a registry of skills,
+/// inventory, and helper methods to perform skill/attribute checks,
+/// mark skills on success, run improvement checks, and assist with
+/// character creation caps and point allocation.
 public struct CharacterSheet: Codable, Sendable, Equatable {
     public var name: String
     public var occupation: String?
@@ -32,21 +37,28 @@ public struct CharacterSheet: Codable, Sendable, Equatable {
         self.creationSkillCap = creationSkillCap
     }
 
+    /// Obtain an attribute value, or 0 if unset.
     public func attribute(_ attr: Attribute) -> Int { attributes[attr] ?? 0 }
 
+    /// Set an attribute to a specific value.
     public mutating func setAttribute(_ attr: Attribute, value: Int) {
         attributes[attr] = value
     }
 
+    /// Add or replace a skill by name.
     public mutating func setSkill(_ skill: Skill) {
         skills[skill.name] = skill
     }
 
+    /// Obtain threshold values for an attribute.
     public func thresholds(for attr: Attribute) -> AttributeThresholds { .init(value: attributes[attr] ?? 0) }
 }
 
 public extension CharacterSheet {
     /// Perform a skill test for a named skill using the provided tester.
+    ///
+    /// By default, a regular-or-better success marks the skill for later
+    /// improvement checks. Set `markOnSuccess` to `false` to disable.
     mutating func testSkill(named name: String,
                             mode: D100Mode = .normal,
                             markOnSuccess: Bool = true,
@@ -68,7 +80,7 @@ public extension CharacterSheet {
 
     // MARK: - Character creation helpers
 
-    /// Set or clear the creation-time skill cap.
+    /// Set or clear the creation-time skill cap for point-allocation helpers.
     mutating func setCreationSkillCap(_ cap: Int?) {
         self.creationSkillCap = cap
     }

@@ -1,7 +1,11 @@
 import Foundation
 
 /// Enumerates predefined Call of Cthulhu 7e skills, including specializations.
-/// Includes a `.custom` case for non-standard skills.
+///
+/// This type provides user-facing `displayName` values and `defaultBase`
+/// values, some of which depend on attributes (e.g., Dodge = DEX/2, Language
+/// (Own) = EDU). Use `.custom(name:base:)` for table- or scenario-specific
+/// additions.
 public enum SkillType: Codable, Hashable, Sendable {
     case accounting
     case anthropology
@@ -109,7 +113,8 @@ public enum SkillType: Codable, Hashable, Sendable {
         }
     }
 
-    /// Default base value for the skill per CoC 7e. Some depend on attributes.
+    /// Default base value for the skill per CoC 7e rules.
+    /// Some base values depend on attributes.
     public func defaultBase(attributes: [Attribute: Int] = [:]) -> Int {
         switch self {
         case .accounting: return 5
@@ -166,7 +171,8 @@ public enum SkillType: Codable, Hashable, Sendable {
 }
 
 public extension Skill {
-    /// Convenience initializer from a `SkillType`. If `value` is omitted, it defaults to the base.
+    /// Convenience initializer from a `SkillType`.
+    /// If `value` is omitted, it defaults to the computed base.
     init(type: SkillType, value: Int? = nil, attributes: [Attribute: Int] = [:]) {
         let base = type.defaultBase(attributes: attributes)
         self.init(name: type.displayName, value: value ?? base, base: base)
@@ -174,7 +180,7 @@ public extension Skill {
 }
 
 public extension CharacterSheet {
-    /// Add or update a skill by type, using default base if value is omitted.
+    /// Add or update a skill by type, using default base if `value` is omitted.
     mutating func setSkill(_ type: SkillType, value: Int? = nil) {
         let s = Skill(type: type, value: value, attributes: attributes)
         self.setSkill(s)

@@ -1,5 +1,6 @@
 import Foundation
 
+/// A single inventory item tracked on a character sheet.
 public struct Item: Codable, Hashable, Sendable {
     public var name: String
     public var quantity: Int
@@ -12,6 +13,7 @@ public struct Item: Codable, Hashable, Sendable {
     }
 }
 
+/// A simple collection of items held by an investigator.
 public struct Inventory: Codable, Sendable, Equatable {
     public var items: [Item]
 
@@ -35,4 +37,3 @@ public struct Inventory: Codable, Sendable, Equatable {
         }
     }
 }
-

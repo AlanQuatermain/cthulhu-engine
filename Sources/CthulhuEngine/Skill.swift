@@ -1,6 +1,10 @@
 import Foundation
 
 /// Represents a Call of Cthulhu skill measured as a percentage.
+///
+/// Each skill has a `base` value influenced by the rules or attributes,
+/// a current `value`, and a `markedForImprovement` flag which is toggled
+/// by successful use (regular or better) and consumed by improvement checks.
 public struct Skill: Codable, Hashable, Sendable {
     public var name: String
     /// Current effective skill value (0-100+).
@@ -23,6 +27,7 @@ public struct Skill: Codable, Hashable, Sendable {
     public func displayName() -> String { name }
 }
 
+/// Success classifications per Call of Cthulhu 7e.
 public enum SuccessLevel: String, Codable, Equatable, Sendable {
     case fumble
     case failure
@@ -32,11 +37,13 @@ public enum SuccessLevel: String, Codable, Equatable, Sendable {
     case critical
 }
 
+/// The result of a single skill test, including die roll and classification.
 public struct SkillTestResult: Codable, Equatable, Sendable {
     public let roll: Int
     public let success: SuccessLevel
 }
 
+/// The result of a skill improvement check.
 public struct SkillImprovementResult: Codable, Equatable, Sendable {
     public let name: String
     public let before: Int
@@ -46,6 +53,7 @@ public struct SkillImprovementResult: Codable, Equatable, Sendable {
     public let improved: Bool
 }
 
+/// Controls how a d100 is rolled.
 public enum D100Mode: Sendable {
     case normal
     case advantage

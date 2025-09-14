@@ -1,7 +1,10 @@
 import Foundation
 
 /// Core Call of Cthulhu 7e characteristics.
-/// Stored as percentage values (typically multiples of 5).
+///
+/// Characteristics are stored as percentage values (typically multiples of 5).
+/// Use `AttributeThresholds` to obtain half and fifth values for hard and
+/// extreme checks.
 public enum Attribute: String, CaseIterable, Codable, Hashable, Sendable {
     case str, con, dex, app, pow, siz, int, edu
 
@@ -35,16 +38,20 @@ public enum Attribute: String, CaseIterable, Codable, Hashable, Sendable {
 }
 
 public extension Dictionary where Key == Attribute, Value == Int {
-    /// Convenience to access a characteristic value; returns 0 when missing.
+    /// Convenience accessor for a characteristic value; returns 0 when missing.
     subscript(_ attribute: Attribute) -> Int {
         get { return self[attribute, default: 0] }
         set { self[attribute] = newValue }
     }
 }
 
+/// A value and its standard hard and extreme thresholds.
 public struct AttributeThresholds: Sendable, Codable, Equatable {
+    /// The full value (regular success threshold).
     public let value: Int
+    /// Half the value (hard success threshold).
     public let half: Int
+    /// One fifth of the value (extreme success threshold).
     public let fifth: Int
 
     public init(value: Int) {
@@ -53,4 +60,3 @@ public struct AttributeThresholds: Sendable, Codable, Equatable {
         self.fifth = value / 5
     }
 }
-
