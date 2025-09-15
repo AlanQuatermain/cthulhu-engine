@@ -14,7 +14,7 @@ set -euo pipefail
 
 ROOT_DIR=$(cd "$(dirname "$0")"/.. && pwd)
 TARGET="CthulhuEngine"
-OUT_DIR="$ROOT_DIR/Documentary"
+OUT_DIR="$ROOT_DIR/Documents"
 STATIC_HOSTING=0
 BASE_PATH=""
 

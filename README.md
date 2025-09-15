@@ -178,7 +178,7 @@ if let attack = sheet.performAttack(weapon: rifle, using: .firearmsRifleShotgun,
 ./Scripts/generate-docs.sh --static-hosting CthulhuEngine
 ```
 
-The generated site is written to the `Documentary/` folder at the repo root (ignored by git).
+The generated site is written to the `Documents/` folder at the repo root (ignored by git).
 
 ## Testing and Coverage
 
