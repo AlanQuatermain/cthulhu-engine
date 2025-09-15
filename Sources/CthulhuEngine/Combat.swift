@@ -32,7 +32,7 @@ public extension CharacterSheet {
     /// - Parameters:
     ///   - weapon: The weapon used for the attack.
     ///   - skillName: The skill to test (must exist on the sheet).
-    ///   - mode: D100 rolling mode (normal/advantage/disadvantage).
+    ///   - options: Attack options including range, cover, size, aim, etc.
     ///   - markOnSuccess: Whether to mark the skill on success. Defaults to true.
     /// - Returns: An `AttackResult` if the skill is found; otherwise `nil`.
     mutating func performAttack(weapon: Weapon,
