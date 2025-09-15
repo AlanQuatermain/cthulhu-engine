@@ -60,7 +60,6 @@ if let result = sheet.performAttack(weapon: WeaponsCatalog.knife, using: .fighti
   print(result.test.success, result.damage?.value as Any, result.impaled)
 }
 ```
-```
 
 > Note: Many weapons in Call of Cthulhu have additional properties (range bands,
 > special effects like impales, or alternate damage at different ranges).
