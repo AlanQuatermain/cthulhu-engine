@@ -1,5 +1,11 @@
 # CthulhuEngine
 
+[![Build](https://github.com/alanquatermain/cthulhu-engine/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/alanquatermain/cthulhu-engine/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/alanquatermain/cthulhu-engine/branch/main/graph/badge.svg)](https://codecov.io/gh/alanquatermain/cthulhu-engine)
+[![Docs](https://img.shields.io/badge/docs-DocC-blue?logo=swift)](https://alanquatermain.github.io/cthulhu-engine)
+![Swift 6.2](https://img.shields.io/badge/Swift-6.2-orange?logo=swift)
+[![Release](https://img.shields.io/github/v/release/alanquatermain/cthulhu-engine?include_prereleases)](https://github.com/alanquatermain/cthulhu-engine/releases)
+
 A lightweight Swift library for Call of Cthulhu (7e) character sheets, skills, attributes, inventory, weapons, and d100 tests powered by DiceRoller.
 
 - Attributes and thresholds (STR/CON/DEX/APP/POW/SIZ/INT/EDU)
@@ -197,4 +203,3 @@ xcrun llvm-cov report \
 ## License
 
 This project is distributed under terms specified by the repository owner. See the repository for license information once published.
-
