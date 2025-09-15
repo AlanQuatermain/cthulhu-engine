@@ -11,12 +11,45 @@ on:
 
 jobs:
   build:
-
-    runs-on: macos-latest
-
+    runs-on: macos-14
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: swift build -v
+
+      - name: Run tests with coverage
+        run: swift test --enable-code-coverage -v
+
+      - name: Generate coverage (LCOV)
+        run: |
+          set -euo pipefail
+          PROFDATA=.build/debug/codecov/default.profdata
+          if [[ ! -f "$PROFDATA" ]]; then
+            echo "Coverage profile not found at $PROFDATA" >&2
+            exit 1
+          fi
+          # Prefer the .xctest bundle binary if present
+          BINARY=$(find .build -type f -path "*/CthulhuEnginePackageTests.xctest/Contents/MacOS/*" | head -n 1)
+          if [[ -z "$BINARY" ]]; then
+            # Fallback: any *PackageTests executable
+            BINARY=$(find .build -type f -name "*PackageTests" -perm -111 | head -n 1)
+          fi
+          echo "Using binary: $BINARY"
+          xcrun llvm-cov export -format=lcov "$BINARY" -instr-profile "$PROFDATA" > coverage.lcov
+          xcrun llvm-cov report "$BINARY" -instr-profile "$PROFDATA" | tee coverage.txt
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: |
+            coverage.lcov
+            coverage.txt
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage.lcov
+          flags: unittests
+          fail_ci_if_error: true
