@@ -175,7 +175,7 @@ if let attack = sheet.performAttack(weapon: rifle, using: .firearmsRifleShotgun,
 ./Scripts/generate-docs.sh
 
 # For static hosting (e.g., GitHub Pages) with a base path
-./Scripts/generate-docs.sh --static-hosting CthulhuEngine
+./Scripts/generate-docs.sh --static-hosting cthulhu-engine
 ```
 
 The generated site is written to the `Documents/` folder at the repo root (ignored by git).

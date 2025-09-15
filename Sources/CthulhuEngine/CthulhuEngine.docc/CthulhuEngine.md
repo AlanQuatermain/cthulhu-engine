@@ -4,7 +4,6 @@ Welcome to CthulhuEngine — a lightweight Swift library for managing Call of Ct
 
 @Metadata {
   @TechnologyRoot
-  @PageImage(purpose: card, source: "logo")
 }
 
 ## Overview
