@@ -16,7 +16,7 @@ ROOT_DIR=$(cd "$(dirname "$0")"/.. && pwd)
 TARGET="CthulhuEngine"
 OUT_DIR="$ROOT_DIR/Documents"
 STATIC_HOSTING=0
-BASE_PATH=""
+BASE_PATH="cthulhu-engine"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
