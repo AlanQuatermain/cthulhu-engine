@@ -3,7 +3,7 @@
 [![Build](https://img.shields.io/github/actions/workflow/status/alanquatermain/cthulhu-engine/ci.yml?branch=main&logo=github&label=CI)](https://github.com/alanquatermain/cthulhu-engine/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/alanquatermain/cthulhu-engine/branch/main/graph/badge.svg)](https://codecov.io/gh/alanquatermain/cthulhu-engine)
 [![Docs](https://img.shields.io/badge/docs-DocC-blue?logo=swift)](https://alanquatermain.github.io/cthulhu-engine)
-![Swift 6.2](https://img.shields.io/badge/Swift-6.2-orange?logo=swift)
+![Swift 6.1](https://img.shields.io/badge/Swift-6.1-orange?logo=swift)
 [![Release](https://img.shields.io/github/v/release/alanquatermain/cthulhu-engine?include_prereleases)](https://github.com/alanquatermain/cthulhu-engine/releases)
 
 A lightweight Swift library for Call of Cthulhu (7e) character sheets, skills, attributes, inventory, weapons, and d100 tests powered by DiceRoller.
@@ -21,7 +21,7 @@ Documentation website (DocC): https://alanquatermain.github.io/cthulhu-engine
 
 ## Requirements
 
-- Swift 6.2 or later (package manifest uses swift-tools-version: 6.2)
+- Swift 6.1 or later (package manifest uses swift-tools-version: 6.1)
 - Swift Package Manager (SPM)
 
 ## Installation (Swift Package Manager)
@@ -29,7 +29,7 @@ Documentation website (DocC): https://alanquatermain.github.io/cthulhu-engine
 Add the package dependency to your `Package.swift`:
 
 ```swift
-// swift-tools-version: 6.2
+// swift-tools-version: 6.1
 import PackageDescription
 
 let package = Package(
