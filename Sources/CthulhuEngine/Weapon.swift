@@ -6,17 +6,48 @@ public struct Weapon: Codable, Hashable, Sendable {
     public var damage: WeaponDamage
     public var skill: SkillType?
     public var notes: String?
+    public var isImpaling: Bool
+    public var range: RangeProfile?
+    public var ammoCapacity: Int?
+    public var rateOfFire: Int?
+    public var malfunctionOn: Int?
 
-    public init(name: String, damage: WeaponDamage, skill: SkillType? = nil, notes: String? = nil) {
+    public init(name: String,
+                damage: WeaponDamage,
+                skill: SkillType? = nil,
+                notes: String? = nil,
+                isImpaling: Bool = false,
+                range: RangeProfile? = nil,
+                ammoCapacity: Int? = nil,
+                rateOfFire: Int? = nil,
+                malfunctionOn: Int? = nil) {
         self.name = name
         self.damage = damage
         self.skill = skill
         self.notes = notes
+        self.isImpaling = isImpaling
+        self.range = range
+        self.ammoCapacity = ammoCapacity
+        self.rateOfFire = rateOfFire
+        self.malfunctionOn = malfunctionOn
     }
 
     /// Roll damage using the provided context (e.g., damage bonus).
-    public func rollDamage(context: DamageContext = .init()) -> DamageRollResult {
-        damage.roll(context: context)
+    public func rollDamage(context: DamageContext = .init(), impale: Bool = false) -> DamageRollResult {
+        damage.roll(context: context, impale: impale && isImpaling)
+    }
+}
+
+/// Simple range profile (yards) for a weapon. Extend as needed for band rules.
+public struct RangeProfile: Codable, Hashable, Sendable {
+    public var short: Int?
+    public var medium: Int?
+    public var long: Int?
+
+    public init(short: Int? = nil, medium: Int? = nil, long: Int? = nil) {
+        self.short = short
+        self.medium = medium
+        self.long = long
     }
 }
 
@@ -25,27 +56,41 @@ public struct Weapon: Codable, Hashable, Sendable {
 /// Supports variable placeholders in braces, e.g. `{DB}` for damage bonus.
 public struct WeaponDamage: Codable, Hashable, Sendable {
     public var expression: String
+    /// Optional alternate expression for an 'impale' result.
+    public var impaleExpression: String?
 
-    public init(expression: String) { self.expression = expression }
+    public init(expression: String, impaleExpression: String? = nil) {
+        self.expression = expression
+        self.impaleExpression = impaleExpression
+    }
 
-    public func roll(context: DamageContext = .init()) -> DamageRollResult {
-        let resolved = DiceUtil.resolve(expression: expression, variables: context.variables)
+    public func roll(context: DamageContext = .init(), impale: Bool = false) -> DamageRollResult {
+        let base = impale ? (impaleExpression ?? expression) : expression
+        let resolved: String
+        if let db = context.damageBonusExpression {
+            resolved = DiceUtil.resolve(expression: base, stringVariables: ["DB": db])
+        } else {
+            resolved = DiceUtil.resolve(expression: base, stringVariables: [:])
+        }
         let value = (try? DiceUtil.rollValue(resolved)) ?? 0
-        return DamageRollResult(input: expression, resolved: resolved, value: value)
+        return DamageRollResult(input: base, resolved: resolved, value: value)
     }
 }
 
 /// Context for damage rolls, such as STR/SIZ damage bonus.
 public struct DamageContext: Codable, Hashable, Sendable {
-    /// Damage bonus to add for melee weapons; used when the damage expression contains `{DB}`.
-    public var damageBonus: Int?
+    /// Damage bonus expression to add for melee weapons; used when the damage expression contains `{DB}`.
+    /// Examples: "-2", "0", "1d4", "1d6".
+    public var damageBonusExpression: String?
 
-    public init(damageBonus: Int? = nil) { self.damageBonus = damageBonus }
-
-    var variables: [String: Int] {
-        var v: [String: Int] = [:]
-        if let db = damageBonus { v["DB"] = db }
-        return v
+    public init(damageBonus: Int? = nil, damageBonusExpression: String? = nil) {
+        if let expr = damageBonusExpression {
+            self.damageBonusExpression = expr
+        } else if let v = damageBonus {
+            self.damageBonusExpression = String(v)
+        } else {
+            self.damageBonusExpression = nil
+        }
     }
 }
 
@@ -64,8 +109,9 @@ public enum WeaponsCatalog {
 
     /// Knife: 1d4+{DB}
     public static let knife = Weapon(name: "Knife",
-                                     damage: .init(expression: "1d4+{DB}"),
-                                     skill: .fighting(specialization: "Knife"))
+                                     damage: .init(expression: "1d4+{DB}", impaleExpression: "4+1d4+{DB}"),
+                                     skill: .fighting(specialization: "Knife"),
+                                     isImpaling: true)
 
     /// Club: 1d6+{DB}
     public static let club = Weapon(name: "Club",
@@ -75,5 +121,11 @@ public enum WeaponsCatalog {
     /// Generic handgun: 1d10 (use specific stats at your table).
     public static let handgun = Weapon(name: "Handgun",
                                        damage: .init(expression: "1d10"),
-                                       skill: .firearmsHandgun)
+                                       skill: .firearmsHandgun,
+                                       notes: nil,
+                                       isImpaling: false,
+                                       range: .init(short: 15, medium: 30, long: 60),
+                                       ammoCapacity: 6,
+                                       rateOfFire: 1,
+                                       malfunctionOn: 100)
 }

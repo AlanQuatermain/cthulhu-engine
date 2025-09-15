@@ -27,7 +27,7 @@ enum DiceUtil {
         return (try? rollValue(expr)) ?? Int.random(in: 1...100)
     }
 
-    /// Resolve variables embedded in braces within an expression, e.g.,
+    /// Resolve integer variables embedded in braces within an expression, e.g.,
     /// `"1d6+{DB}"` with variables `["DB": 2]` becomes `"1d6+2"`.
     static func resolve(expression: String, variables: [String: Int]) -> String {
         var result = expression
@@ -43,6 +43,27 @@ enum DiceUtil {
             result = result.replacingOccurrences(of: "{DB}", with: "0")
         }
         // Normalize no-op math
+        result = result.replacingOccurrences(of: "+0", with: "")
+        result = result.replacingOccurrences(of: "0+", with: "")
+        result = result.replacingOccurrences(of: "-0", with: "")
+        return result
+    }
+
+    /// Resolve string variables embedded in braces within an expression, e.g.,
+    /// `"1d4+{DB}"` with variables `["DB": "1d4"]` becomes `"1d4+1d4"`.
+    static func resolve(expression: String, stringVariables: [String: String]) -> String {
+        var result = expression
+        if !stringVariables.isEmpty {
+            for (key, value) in stringVariables {
+                let token = "{\(key)}"
+                result = result.replacingOccurrences(of: token, with: value)
+            }
+        }
+        // Replace any unresolved placeholders with 0
+        if result.contains("{") {
+            result = result.replacingOccurrences(of: "{DB}", with: "0")
+        }
+        // Normalize trivial math with +0 or -0
         result = result.replacingOccurrences(of: "+0", with: "")
         result = result.replacingOccurrences(of: "0+", with: "")
         result = result.replacingOccurrences(of: "-0", with: "")

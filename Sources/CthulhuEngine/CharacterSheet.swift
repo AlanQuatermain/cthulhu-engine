@@ -154,4 +154,27 @@ public extension CharacterSheet {
         }
         return results
     }
+
+    // MARK: - Derived values
+
+    /// Compute the Damage Bonus (DB) expression from STR+SIZ according to CoC 7e.
+    /// Returns strings like "-2", "-1", "0", "1d4", "1d6", "2d6", etc.
+    public func damageBonusExpression() -> String {
+        let sum = (attributes[.str] ?? 0) + (attributes[.siz] ?? 0)
+        switch sum {
+        case ..<65: return "-2"
+        case 65...84: return "-1"
+        case 85...124: return "0"
+        case 125...164: return "1d4"
+        case 165...204: return "1d6"
+        case 205...284: return "2d6"
+        case 285...364: return "3d6"
+        default: return "4d6"
+        }
+    }
+
+    /// Convenience to create a `DamageContext` for melee damage rolls using the sheet's DB.
+    public func damageContext() -> DamageContext {
+        .init(damageBonusExpression: damageBonusExpression())
+    }
 }
