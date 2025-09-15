@@ -1,6 +1,6 @@
 # CthulhuEngine
 
-[![Build](https://img.shields.io/github/actions/workflow/status/alanquatermain/cthulhu-engine/ci.yml?branch=main&logo=github&label=CI)](https://github.com/alanquatermain/cthulhu-engine/actions/workflows/ci.yml)
+[![Build](https://img.shields.io/github/actions/workflow/status/alanquatermain/cthulhu-engine/swift.yml?branch=main&logo=github&label=CI)](https://github.com/alanquatermain/cthulhu-engine/actions/workflows/swift.yml)
 [![codecov](https://codecov.io/gh/alanquatermain/cthulhu-engine/branch/main/graph/badge.svg)](https://codecov.io/gh/alanquatermain/cthulhu-engine)
 [![Docs](https://img.shields.io/badge/docs-DocC-blue?logo=swift)](https://alanquatermain.github.io/cthulhu-engine)
 ![Swift 6.1](https://img.shields.io/badge/Swift-6.1-orange?logo=swift)
