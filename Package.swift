@@ -3,6 +3,18 @@
 
 import PackageDescription
 
+#if swift(>=6.2)
+let swiftTesting: Package.Dependency = .package(
+  url: "https://github.com/swiftlang/swift-testing.git",
+  branch: "main"
+)
+#else
+let swiftTesting: Package.Dependency = .package(
+  url: "https://github.com/swiftlang/swift-testing.git",
+  from: "6.1.0"
+)
+#endif
+
 let package = Package(
     name: "CthulhuEngine",
     products: [
@@ -14,11 +26,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/alanquatermain/DiceRoller.git", branch: "main"),
-#if swift(>=6.2)
-        .package(url: "https://github.com/swiftlang/swift-testing.git", branch: "main"),
-#else
-        .package(url: "https://github.com/swiftlang/swift-testing.git", from: "6.1.0"),
-#endif
+        swiftTesting,
         // Enables `swift package generate-documentation` via swift-docc plugin
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0")
     ],
