@@ -24,12 +24,17 @@ jobs:
 
       - name: Generate documentation
         run: |
-          ./Scripts/generate-docs.sh --static-hosting cthulhu-engine --out Documents --target CthulhuEngine
+          swift package generate-documentation \
+            --target CthulhuEngine \
+            --disable-indexing \
+            --transform-for-static-hosting \
+            --hosting-base-path cthulhu-engine \
+            --output-path docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: Documents
+          path: docs
 
   deploy:
     name: Deploy to GitHub Pages
