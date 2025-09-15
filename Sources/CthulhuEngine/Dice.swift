@@ -26,4 +26,26 @@ enum DiceUtil {
         }
         return (try? rollValue(expr)) ?? Int.random(in: 1...100)
     }
+
+    /// Resolve variables embedded in braces within an expression, e.g.,
+    /// `"1d6+{DB}"` with variables `["DB": 2]` becomes `"1d6+2"`.
+    static func resolve(expression: String, variables: [String: Int]) -> String {
+        var result = expression
+        if !variables.isEmpty {
+            for (key, value) in variables {
+                // Replace occurrences of {KEY} (case-sensitive)
+                let token = "{\(key)}"
+                result = result.replacingOccurrences(of: token, with: String(value))
+            }
+        }
+        // Replace any unresolved placeholders with 0 (currently {DB} is supported)
+        if result.contains("{") {
+            result = result.replacingOccurrences(of: "{DB}", with: "0")
+        }
+        // Normalize no-op math
+        result = result.replacingOccurrences(of: "+0", with: "")
+        result = result.replacingOccurrences(of: "0+", with: "")
+        result = result.replacingOccurrences(of: "-0", with: "")
+        return result
+    }
 }

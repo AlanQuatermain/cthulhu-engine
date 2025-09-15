@@ -22,6 +22,7 @@ Welcome to CthulhuEngine — a lightweight Swift library for managing Call of Ct
 - <doc:GettingStarted>
 - <doc:SkillsAndAttributes>
 - <doc:DiceRolls>
+- <doc:WeaponsAndDamage>
 
 ### Advancement
 
@@ -30,4 +31,3 @@ Welcome to CthulhuEngine — a lightweight Swift library for managing Call of Ct
 ### Character Creation
 
 - <doc:CharacterCreation>
-
