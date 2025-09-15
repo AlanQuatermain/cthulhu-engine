@@ -37,26 +37,33 @@ public extension CharacterSheet {
     /// - Returns: An `AttackResult` if the skill is found; otherwise `nil`.
     mutating func performAttack(weapon: Weapon,
                                 usingSkillNamed skillName: String,
-                                mode: D100Mode = .normal,
+                                options: AttackOptions = .init(),
                                 markOnSuccess: Bool = true) -> AttackResult? {
         guard let skill = skills[skillName] else { return nil }
-        let test = SkillTester().test(skill: skill, mode: mode)
+        let mode = AttackModeCalculator.mode(for: options)
+        var test = SkillTester().test(skill: skill, mode: mode)
+        // Enforce range/cover difficulty requirement
+        let req = AttackModeCalculator.requiredDifficulty(options: options, weapon: weapon)
+        test = .init(roll: test.roll, success: AttackModeCalculator.enforceRequirement(test.success, required: req))
         if markOnSuccess, test.success != .failure, test.success != .fumble {
             var updated = skill
             updated.markedForImprovement = true
             skills[skillName] = updated
         }
         let ctx = damageContext()
-        let (dmg, impaled) = AttackResolver.damage(for: weapon, success: test.success, context: ctx)
+        var (dmg, impaled) = AttackResolver.damage(for: weapon, success: test.success, context: ctx)
+        // Hard cover: only impales deal damage
+        if options.cover == .hard, dmg != nil, impaled == false {
+            dmg = nil
+        }
         return AttackResult(weapon: weapon, test: test, damage: dmg, impaled: impaled)
     }
 
     /// Perform an attack roll with the given weapon and typed skill.
     mutating func performAttack(weapon: Weapon,
                                 using skill: SkillType,
-                                mode: D100Mode = .normal,
+                                options: AttackOptions = .init(),
                                 markOnSuccess: Bool = true) -> AttackResult? {
-        performAttack(weapon: weapon, usingSkillNamed: skill.displayName, mode: mode, markOnSuccess: markOnSuccess)
+        performAttack(weapon: weapon, usingSkillNamed: skill.displayName, options: options, markOnSuccess: markOnSuccess)
     }
 }
-

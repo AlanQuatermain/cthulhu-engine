@@ -11,6 +11,7 @@ public struct Weapon: Codable, Hashable, Sendable {
     public var ammoCapacity: Int?
     public var rateOfFire: Int?
     public var malfunctionOn: Int?
+    public var era: Era?
 
     public init(name: String,
                 damage: WeaponDamage,
@@ -20,7 +21,8 @@ public struct Weapon: Codable, Hashable, Sendable {
                 range: RangeProfile? = nil,
                 ammoCapacity: Int? = nil,
                 rateOfFire: Int? = nil,
-                malfunctionOn: Int? = nil) {
+                malfunctionOn: Int? = nil,
+                era: Era? = nil) {
         self.name = name
         self.damage = damage
         self.skill = skill
@@ -30,6 +32,7 @@ public struct Weapon: Codable, Hashable, Sendable {
         self.ammoCapacity = ammoCapacity
         self.rateOfFire = rateOfFire
         self.malfunctionOn = malfunctionOn
+        self.era = era
     }
 
     /// Roll damage using the provided context (e.g., damage bonus).
@@ -111,7 +114,8 @@ public enum WeaponsCatalog {
     public static let knife = Weapon(name: "Knife",
                                      damage: .init(expression: "1d4+{DB}", impaleExpression: "4+1d4+{DB}"),
                                      skill: .fighting(specialization: "Knife"),
-                                     isImpaling: true)
+                                     isImpaling: true,
+                                     era: .classic1920s)
 
     /// Club: 1d6+{DB}
     public static let club = Weapon(name: "Club",
@@ -127,35 +131,41 @@ public enum WeaponsCatalog {
                                        range: .init(short: 15, medium: 30, long: 60),
                                        ammoCapacity: 6,
                                        rateOfFire: 1,
-                                       malfunctionOn: 100)
+                                       malfunctionOn: 100,
+                                       era: .classic1920s)
 
     /// Sword: 1d8+{DB} (impaling)
     public static let sword = Weapon(name: "Sword",
                                      damage: .init(expression: "1d8+{DB}", impaleExpression: "8+1d8+{DB}"),
                                      skill: .fighting(specialization: "Sword"),
-                                     isImpaling: true)
+                                     isImpaling: true,
+                                     era: .classic1920s)
 
     /// Hatchet: 1d6+{DB} (impaling)
     public static let hatchet = Weapon(name: "Hatchet",
                                        damage: .init(expression: "1d6+{DB}", impaleExpression: "6+1d6+{DB}"),
                                        skill: .fighting(specialization: "Axe"),
-                                       isImpaling: true)
+                                       isImpaling: true,
+                                       era: .classic1920s)
 
     /// Spear: 1d8+{DB} (impaling)
     public static let spear = Weapon(name: "Spear",
                                      damage: .init(expression: "1d8+{DB}", impaleExpression: "8+1d8+{DB}"),
                                      skill: .fighting(specialization: "Spear"),
-                                     isImpaling: true)
+                                     isImpaling: true,
+                                     era: .classic1920s)
 
     /// Crowbar: 1d6+{DB}
     public static let crowbar = Weapon(name: "Crowbar",
                                        damage: .init(expression: "1d6+{DB}"),
-                                       skill: .fighting(specialization: "Club"))
+                                       skill: .fighting(specialization: "Club"),
+                                       era: .classic1920s)
 
     /// Brass Knuckles: 1d3+{DB} (simulate 1d3 via (1d6+1)/2)
     public static let brassKnuckles = Weapon(name: "Brass Knuckles",
                                              damage: .init(expression: "(1d6+1)/2+{DB}"),
-                                             skill: .fightingBrawl)
+                                             skill: .fightingBrawl,
+                                             era: .classic1920s)
 
     /// .45 Pistol: 1d10
     public static let pistol45 = Weapon(name: ".45 Pistol",
@@ -164,7 +174,8 @@ public enum WeaponsCatalog {
                                         range: .init(short: 15, medium: 30, long: 60),
                                         ammoCapacity: 7,
                                         rateOfFire: 1,
-                                        malfunctionOn: 100)
+                                        malfunctionOn: 100,
+                                        era: .classic1920s)
 
     /// .303 Rifle: 2d6+4
     public static let rifle303 = Weapon(name: ".303 Rifle",
@@ -173,7 +184,8 @@ public enum WeaponsCatalog {
                                         range: .init(short: 110, medium: 220, long: 440),
                                         ammoCapacity: 10,
                                         rateOfFire: 1,
-                                        malfunctionOn: 100)
+                                        malfunctionOn: 100,
+                                        era: .classic1920s)
 
     /// 12g Shotgun (close): 4d6
     public static let shotgun12gClose = Weapon(name: "12g Shotgun (Close)",
@@ -182,7 +194,8 @@ public enum WeaponsCatalog {
                                                range: .init(short: 10, medium: 20, long: 50),
                                                ammoCapacity: 2,
                                                rateOfFire: 2,
-                                               malfunctionOn: 100)
+                                               malfunctionOn: 100,
+                                               era: .classic1920s)
 
     /// 12g Shotgun (medium): 2d6
     public static let shotgun12gMedium = Weapon(name: "12g Shotgun (Medium)",
@@ -191,7 +204,8 @@ public enum WeaponsCatalog {
                                                 range: .init(short: 10, medium: 20, long: 50),
                                                 ammoCapacity: 2,
                                                 rateOfFire: 2,
-                                                malfunctionOn: 100)
+                                                malfunctionOn: 100,
+                                                era: .classic1920s)
 
     /// 12g Shotgun (long): 1d6
     public static let shotgun12gLong = Weapon(name: "12g Shotgun (Long)",
@@ -200,5 +214,6 @@ public enum WeaponsCatalog {
                                               range: .init(short: 10, medium: 20, long: 50),
                                               ammoCapacity: 2,
                                               rateOfFire: 2,
-                                              malfunctionOn: 100)
+                                              malfunctionOn: 100,
+                                              era: .classic1920s)
 }
