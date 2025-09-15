@@ -177,4 +177,19 @@ public extension CharacterSheet {
     public func damageContext() -> DamageContext {
         .init(damageBonusExpression: damageBonusExpression())
     }
+
+    /// Compute the Build value from STR+SIZ according to CoC 7e.
+    public func buildValue() -> Int {
+        let sum = (attributes[.str] ?? 0) + (attributes[.siz] ?? 0)
+        switch sum {
+        case ..<65: return -2
+        case 65...84: return -1
+        case 85...124: return 0
+        case 125...164: return 1
+        case 165...204: return 2
+        case 205...284: return 3
+        case 285...364: return 4
+        default: return 5
+        }
+    }
 }

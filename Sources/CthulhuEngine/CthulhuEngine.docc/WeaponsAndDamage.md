@@ -48,6 +48,18 @@ Compute a damage bonus expression from STR+SIZ:
 let dbExpr = sheet.damageBonusExpression() // e.g., "1d4"
 let ctx = sheet.damageContext()            // DamageContext(damageBonusExpression: dbExpr)
 let dmg = knife.rollDamage(context: ctx)
+
+### Resolving Attacks
+
+Use `performAttack(weapon:using:mode:markOnSuccess:)` to roll the skill and
+resolve damage in one call. Extreme successes with impaling weapons use the
+impale expression.
+
+```swift
+if let result = sheet.performAttack(weapon: WeaponsCatalog.knife, using: .fightingBrawl) {
+  print(result.test.success, result.damage?.value as Any, result.impaled)
+}
+```
 ```
 
 > Note: Many weapons in Call of Cthulhu have additional properties (range bands,

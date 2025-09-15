@@ -128,4 +128,77 @@ public enum WeaponsCatalog {
                                        ammoCapacity: 6,
                                        rateOfFire: 1,
                                        malfunctionOn: 100)
+
+    /// Sword: 1d8+{DB} (impaling)
+    public static let sword = Weapon(name: "Sword",
+                                     damage: .init(expression: "1d8+{DB}", impaleExpression: "8+1d8+{DB}"),
+                                     skill: .fighting(specialization: "Sword"),
+                                     isImpaling: true)
+
+    /// Hatchet: 1d6+{DB} (impaling)
+    public static let hatchet = Weapon(name: "Hatchet",
+                                       damage: .init(expression: "1d6+{DB}", impaleExpression: "6+1d6+{DB}"),
+                                       skill: .fighting(specialization: "Axe"),
+                                       isImpaling: true)
+
+    /// Spear: 1d8+{DB} (impaling)
+    public static let spear = Weapon(name: "Spear",
+                                     damage: .init(expression: "1d8+{DB}", impaleExpression: "8+1d8+{DB}"),
+                                     skill: .fighting(specialization: "Spear"),
+                                     isImpaling: true)
+
+    /// Crowbar: 1d6+{DB}
+    public static let crowbar = Weapon(name: "Crowbar",
+                                       damage: .init(expression: "1d6+{DB}"),
+                                       skill: .fighting(specialization: "Club"))
+
+    /// Brass Knuckles: 1d3+{DB} (simulate 1d3 via (1d6+1)/2)
+    public static let brassKnuckles = Weapon(name: "Brass Knuckles",
+                                             damage: .init(expression: "(1d6+1)/2+{DB}"),
+                                             skill: .fightingBrawl)
+
+    /// .45 Pistol: 1d10
+    public static let pistol45 = Weapon(name: ".45 Pistol",
+                                        damage: .init(expression: "1d10"),
+                                        skill: .firearmsHandgun,
+                                        range: .init(short: 15, medium: 30, long: 60),
+                                        ammoCapacity: 7,
+                                        rateOfFire: 1,
+                                        malfunctionOn: 100)
+
+    /// .303 Rifle: 2d6+4
+    public static let rifle303 = Weapon(name: ".303 Rifle",
+                                        damage: .init(expression: "2d6+4"),
+                                        skill: .firearmsRifleShotgun,
+                                        range: .init(short: 110, medium: 220, long: 440),
+                                        ammoCapacity: 10,
+                                        rateOfFire: 1,
+                                        malfunctionOn: 100)
+
+    /// 12g Shotgun (close): 4d6
+    public static let shotgun12gClose = Weapon(name: "12g Shotgun (Close)",
+                                               damage: .init(expression: "4d6"),
+                                               skill: .firearmsRifleShotgun,
+                                               range: .init(short: 10, medium: 20, long: 50),
+                                               ammoCapacity: 2,
+                                               rateOfFire: 2,
+                                               malfunctionOn: 100)
+
+    /// 12g Shotgun (medium): 2d6
+    public static let shotgun12gMedium = Weapon(name: "12g Shotgun (Medium)",
+                                                damage: .init(expression: "2d6"),
+                                                skill: .firearmsRifleShotgun,
+                                                range: .init(short: 10, medium: 20, long: 50),
+                                                ammoCapacity: 2,
+                                                rateOfFire: 2,
+                                                malfunctionOn: 100)
+
+    /// 12g Shotgun (long): 1d6
+    public static let shotgun12gLong = Weapon(name: "12g Shotgun (Long)",
+                                              damage: .init(expression: "1d6"),
+                                              skill: .firearmsRifleShotgun,
+                                              range: .init(short: 10, medium: 20, long: 50),
+                                              ammoCapacity: 2,
+                                              rateOfFire: 2,
+                                              malfunctionOn: 100)
 }
