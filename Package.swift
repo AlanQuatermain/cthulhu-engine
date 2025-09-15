@@ -14,7 +14,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/alanquatermain/DiceRoller.git", branch: "main"),
+#if swift(>=6.2)
         .package(url: "https://github.com/swiftlang/swift-testing.git", branch: "main"),
+#else
+        .package(url: "https://github.com/swiftlang/swift-testing.git", from: "6.1.0"),
+#endif
         // Enables `swift package generate-documentation` via swift-docc plugin
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0")
     ],
