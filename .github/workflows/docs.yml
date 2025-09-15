@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -19,17 +19,20 @@ jobs:
     name: Build DocC
     runs-on: macos-latest
     steps:
-      - name: Checkout
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Generate documentation
+      - name: Build DocC documentation
         run: |
+          OUT=$(mktemp -d)
           swift package generate-documentation \
             --target CthulhuEngine \
             --disable-indexing \
             --transform-for-static-hosting \
             --hosting-base-path cthulhu-engine \
-            --output-path docs
+            --output-path $OUT
+          rm -rf docs
+          mv $OUT docs
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
